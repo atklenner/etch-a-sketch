@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+}
+
+.paint-grid {
+  display: grid;
+  height: 700px;
+  width: 700px;
+  grid: repeat(16, auto) / repeat(16, auto);
+}
+
+.button-container {
+  display: grid;
+}
+
+header {
+  color: blue;
+  background-color: coral;
+}
