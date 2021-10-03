@@ -9,10 +9,12 @@
   <body>
     <header>Etch-a-Sketch</header>
     <div class="button-container">
+      <input type="color" id="brush">
+      <input type="color" id="background" value="#ffffff">
       <button>Color</button>
-      <button>Rainbow</button>
+      <button onclick="console.log('hello')">Rainbow</button>
       <button id="clear">Clear</button>
-      <input type="range" min="1" max="100" value="16">
+      <input type="range" min="1" max="100" value="16" id="slider">
     </div>
     <div class="paint-grid"></div>
   </body>
