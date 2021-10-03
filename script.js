@@ -14,6 +14,7 @@ function draw() {
   for(let i = 1; i <= gridSize * gridSize; i++) {
     const box = document.createElement('div');
     box.addEventListener('mouseenter', colorChange);
+    box.addEventListener('touch', colorChange);
     box.style.background = backgroundColor;
     canvas.appendChild(box);
   }
@@ -50,7 +51,7 @@ function shadeColor(color, percent) {
   R = (R > 0) ? R : 0;  
   G = (G > 0) ? G : 0;  
   B = (B > 0) ? B : 0;  
-  
+
   return `rgb(${R}, ${G}, ${B})`;
 }
 
