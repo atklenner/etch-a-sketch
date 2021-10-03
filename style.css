@@ -9,10 +9,6 @@ body {
   grid: repeat(16, auto) / repeat(16, auto);
 }
 
-.button-container {
-  display: grid;
-}
-
 header {
   color: blue;
   background-color: coral;
