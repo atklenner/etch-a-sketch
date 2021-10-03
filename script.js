@@ -1,6 +1,9 @@
 let gridSize = 16;
 let paintColor = 'black';
-let backgroundColor = 'white';
+let backgroundColor = '#ffffff';
+let erasing = false;
+let rainbow = false;
+let shading = false;
 
 function draw() {
   const canvas = document.querySelector('.paint-grid');
@@ -17,12 +20,45 @@ function draw() {
 }
 //this adds a 'painted' class to the divs
 function colorChange(element) {
-  element.target.style.background = paintColor;
-  element.target.classList.add('painted');
+  if(rainbow) {
+    element.target.style.backgroundColor = randomColor();
+  } else if(shading) {
+    element.target.style.backgroundColor = shadeColor(element.target.style.backgroundColor, 10);
+  } else element.target.style.background = paintColor;
+  if(erasing) {
+    element.target.classList.remove('painted');
+  } else element.target.classList.add('painted');
+}
+
+function randomColor() {
+  return '#' + Math.floor(Math.random()*16777215).toString(16);
+}
+
+function shadeColor(color, percent) {
+  color = color.substring(4, color.length - 1);
+  let colors = color.split(', ');
+  let amount = 25;
+
+  let R = parseInt(colors[0]);
+  let G = parseInt(colors[1]);
+  let B = parseInt(colors[2]);
+
+  R = R - amount;
+  G = G - amount;
+  B = B - amount;
+
+  R = (R > 0) ? R : 0;  
+  G = (G > 0) ? G : 0;  
+  B = (B > 0) ? B : 0;  
+  
+  return `rgb(${R}, ${G}, ${B})`;
 }
 
 const brush = document.querySelector('#brush');
-brush.addEventListener('change', (element) => paintColor = element.target.value);
+brush.addEventListener('change', (element) => {
+  paintColor = element.target.value;
+  oldPaintColor = element.target.value;
+});
 
 const background = document.querySelector('#background');
 background.addEventListener('change', changeBackgroundColor);
@@ -49,19 +85,45 @@ function clearPaint() {
 }
 
 const sizeSlider = document.querySelector('#slider');
+const sizeTeller = document.querySelector('span');
 sizeSlider.addEventListener('mouseup', changeGridSize);
+sizeSlider.addEventListener('input', () => {
+  sizeTeller.textContent = `Grid Size: ${sizeSlider.value} x ${sizeSlider.value}`;
+});
 
 function changeGridSize() {
-  console.log(sizeSlider.value);
   gridSize = sizeSlider.value;
   draw();
 }
 
-draw();
+const colorButton = document.querySelector("#color");
+colorButton.addEventListener('click', () => {
+  paintColor = brush.value
+  erasing = false;
+  rainbow = false;
+  shading = false;
+});
 
-//To Do:
-//Add number next to slider telling user what size they are selecting
-//Need a way to make the color, rainbow, and shader buttons only let you select one at a time
-//Need a way to randomly generate a new color every time the mouse enters a new tile
-//Need a way to keep track of shading a tile, also define what shading even is
-//Add an eraser, make sure to erase to the background color and not white
+const rainbowButton = document.querySelector('#rainbow');
+rainbowButton.addEventListener('click', () => {
+  rainbow = true;
+  erasing = false;
+  shading = false;
+});
+
+const shaderButton = document.querySelector('#shader');
+shaderButton.addEventListener('click', () => {
+  rainbow = false;
+  erasing = false;
+  shading = true;
+});
+
+const eraserButton = document.querySelector('#eraser');
+eraserButton.addEventListener('click', () => {
+  paintColor = background.value;
+  erasing = true;
+  rainbow = false;
+  shading = false;
+});
+
+draw();
